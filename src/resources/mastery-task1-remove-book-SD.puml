@@ -1,1 +1,31 @@
-PARTICIPANTS: use this file for creating the remove book from catalog diagram in mastery task 01
+@startuml
+actor Client
+participant RemoveBookFromCatalogActivity
+participant BookNotFoundException
+participant CatalogDao
+
+' Sequence
+
+Client -> RemoveBookFromCatalogActivity: execute(Item, FulfillmentCenter)
+RemoveBookFromCatalogActivity -> CatalogDao: removeBookFromCatalog(Item, FulfillmentCenter)
+
+loop List of all FcPackagingOptions
+  CatalogDao -> Packaging: canFitItem(Item)
+  CatalogDao <-- Packaging: boolean
+  opt Item fits in Packaging
+    CatalogDao -> CatalogDao: add to result
+  end
+end
+
+CatalogDao --> RemoveBookFromCatalogActivity: List<ShipmentOption>
+
+loop List of all ShipmentOptions
+  RemoveBookFromCatalogActivity -> RemoveBookFromCatalogResponse: getCost(ShipmentOption)
+  RemoveBookFromCatalogActivity -> RemoveBookFromCatalogActivity: add to list of ShipmentCosts
+end
+
+RemoveBookFromCatalogActivity -> RemoveBookFromCatalogActivity: sort List of ShipmentCosts
+RemoveBookFromCatalogActivity -> RemoveBookFromCatalogActivity: get ShipmentOption \nfrom first ShipmentCost\nin sorted list
+RemoveBookFromCatalogActivity --> Client: ShipmentOption
+
+@enduml
