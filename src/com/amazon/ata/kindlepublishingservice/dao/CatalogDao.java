@@ -42,7 +42,6 @@ public class CatalogDao {
     }
 
     public void validateBookExists(String bookId) {
-        System.out.println("THE BOOK ID IS " + bookId);
         CatalogItemVersion book = getLatestVersionOfBook(bookId);
 
         if (book == null) {

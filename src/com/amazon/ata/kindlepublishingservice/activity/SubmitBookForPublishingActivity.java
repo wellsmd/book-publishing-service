@@ -52,18 +52,13 @@ public class SubmitBookForPublishingActivity {
      */
     public SubmitBookForPublishingResponse execute(SubmitBookForPublishingRequest request) {
 
-        System.out.println("BEGINNING OF EXECUTE");
-        System.out.println("BOOK ID IS " + request.getBookId());
         // If there is a book ID in the request, validate that it exists in our catalog.
         if (request.getBookId() != null) {
-            System.out.println("THE CONDITION IS TRUE!!!");
             catalogDao.validateBookExists(request.getBookId());
         }
-        System.out.println("BOOK ID IS " + request.getBookId());
 
         // Convert SubmitBookForPublishingRequest to BookPublishRequest.
         final BookPublishRequest bookPublishRequest = BookPublishRequestConverter.toBookPublishRequest(request);
-        System.out.println("BOOK ID IS STILL " + request.getBookId());
 
         // Submit the BookPublishRequest for processing.
         bookPublishRequestManager.addBookPublishRequest(bookPublishRequest);

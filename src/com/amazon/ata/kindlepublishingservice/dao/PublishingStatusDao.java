@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,6 +29,23 @@ public class PublishingStatusDao {
     @Inject
     public PublishingStatusDao(DynamoDBMapper dynamoDbMapper) {
         this.dynamoDbMapper = dynamoDbMapper;
+    }
+
+    public List<PublishingStatusItem> getPublishingStatuses(String publishingRecordId) {
+        PublishingStatusItem item = new PublishingStatusItem();
+        item.setPublishingRecordId(publishingRecordId);
+
+        DynamoDBQueryExpression<PublishingStatusItem> queryExpression = new DynamoDBQueryExpression()
+                .withHashKeyValues(item)
+                .withScanIndexForward(false)
+                .withLimit(1);
+
+        List<PublishingStatusItem> publishingStatusItemList = dynamoDbMapper.query(PublishingStatusItem.class, queryExpression);
+        if (publishingStatusItemList.isEmpty()) {
+            throw new PublishingStatusNotFoundException(String.format("No records found for id: %s", publishingRecordId));
+        }
+
+        return publishingStatusItemList;
     }
 
     /**
