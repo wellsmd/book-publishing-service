@@ -4,11 +4,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Singleton
 public class BookPublishRequestManager {
 
-    private Queue<BookPublishRequest> bookPublishRequests = new LinkedList<>();
+    private Queue<BookPublishRequest> bookPublishRequests = new ConcurrentLinkedQueue<>();
 
     @Inject
     public BookPublishRequestManager() {

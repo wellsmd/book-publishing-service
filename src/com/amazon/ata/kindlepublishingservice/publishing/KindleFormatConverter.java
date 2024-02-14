@@ -7,7 +7,7 @@ import com.amazon.ata.kindlepublishing.utils.KindleConversionUtils;
  */
 public final class KindleFormatConverter {
 
-    private KindleFormatConverter(){}
+    KindleFormatConverter(){}
 
     /**
      * Formats the book fields in the provided publishRequest into their kindle format version.
